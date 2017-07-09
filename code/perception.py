@@ -121,6 +121,8 @@ def perception_step(Rover):
     # NOTE: camera image is coming to you in Rover.img
     # 1) Define source and destination points for perspective transform
     image = Rover.img
+    dst_size = 5
+    bottom_offset = 6
     source = np.float32([[14, 140], [301 ,140],[200, 96], [118, 96]])
     destination = np.float32([[image.shape[1]/2 - dst_size, image.shape[0] - bottom_offset],
                   [image.shape[1]/2 + dst_size, image.shape[0] - bottom_offset],
@@ -131,7 +133,7 @@ def perception_step(Rover):
     transformed_image = perspect_transform(image, source, destination)
     
     # 3) Apply color threshold to identify navigable terrain/obstacles/rock samples
-    coloured_ground = color_thresh(transformed_image, rgb_thresh=(160, 160, 160))
+    coloured_ground = color_thresh2(transformed_image,"ground")
     coloured_notground = color_thresh2(transformed_image,"noground")
     coloured_rock = color_thresh2(transformed_image,"rock")
     
@@ -149,9 +151,15 @@ def perception_step(Rover):
     x_pixel_rock, y_pixel_rock = rover_coords(coloured_rock)
     
     # 6) Convert rover-centric pixel values to world coordinates
-    x_pix_world, y_pix_world = pix_to_world(x_pixel, y_pixel, data.xpos[data.count], data.ypos[data.count], yaw, world_size, scale)
-    x_pix_world_nground, y_pix_world_nground = pix_to_world(x_pixel_nground, y_pixel_nground, data.xpos[data.count], data.ypos[data.count], yaw, world_size, scale)
-    x_pix_world_rock, y_pix_world_rock = pix_to_world(x_pixel_rock, y_pixel_rock, data.xpos[data.count], data.ypos[data.count], yaw, world_size, scale)
+    yaw = Rover.yaw
+    xpos = Rover.pos[0]
+    ypos = Rover.pos[1]
+    world_size = 200
+    scale = 10
+    
+    x_pix_world, y_pix_world = pix_to_world(x_pixel, y_pixel, xpos, ypos, yaw, world_size, scale)
+    x_pix_world_nground, y_pix_world_nground = pix_to_world(x_pixel_nground, y_pixel_nground, xpos, ypos, yaw, world_size, scale)
+    x_pix_world_rock, y_pix_world_rock = pix_to_world(x_pixel_rock, y_pixel_rock, xpos, ypos, yaw, world_size, scale)
     
     # 7) Update Rover worldmap (to be displayed on right side of screen)
         # Example: Rover.worldmap[obstacle_y_world, obstacle_x_world, 0] += 1
