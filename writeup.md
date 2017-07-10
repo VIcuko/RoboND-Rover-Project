@@ -104,4 +104,10 @@ The rover covered mostly all of the ground with a fidelity of more than 60 %, id
 
 The results could be improved by increasing the rover speed in order to reduce the timing to cover all of the ground. Include an additional logic to avoid revisiting same sites by checking position on map and increase fidelity by modifying the colouring for overlapping areas (ground vs obstacle).
 
-Also, as pointed out in the project page, I could include an additional logic for measuring position regarding rocks and redirecting the rover towards them until it detects to be near objective and pick them up.  
+Also, as pointed out in the project page, I could include an additional logic for measuring position regarding rocks and redirecting the rover towards them until it detects to be near objective and pick them up.
+
+Simulator parameters:
+
+Screen resolution: 1024 x 768
+Graphics Quality: Good
+Windowed -> Checked
